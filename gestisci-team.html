@@ -49,7 +49,7 @@
         <section id="manage-hero" class="fade-in-section is-visible" style="text-align: center;">
             <div class="container">
                 <h1 class="animate-on-visible">Gestisci il tuo Team</h1>
-                <p class="section-subtitle animate-on-visible delay-1" style="margin-top: 1rem;">Crea la tua squadra per le Olimpiadi AI o unisciti a un team esistente.</p>
+                <p class="section-subtitle animate-on-visible delay-1" style="margin-top: 1rem;">Crea la tua squadra per le Olimpiadi AI o unisciti a un team esistente. Carica la tua Challenge.</p>
             </div>
         </section>
 
@@ -110,6 +110,44 @@
                     </div>
                 </div>
             </section>
+
+            <section class="fade-in-section">
+                <div class="form-container animate-on-visible" style="max-width: 600px; margin: 2rem auto 0 auto;">
+                    <h3>Carica la tua Challenge</h3>
+                    <small style="display: block; margin-bottom: 1.25rem; color: var(--color-text-secondary); margin-top: 0.30rem; font-size: 1.0rem; text-align: center; font-weight: bold;">Invia l'elaborato finale del tuo team</small>
+                    
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        
+                        <label for="challenge-select">Seleziona Challenge:</label>
+                        <select id="challenge-select" name="challenge-select" required>
+                            <option value="">-- Seleziona la challenge --</option>
+                            <option value="challenge1">Challenge 1: Analisi Predittiva</option>
+                            <option value="challenge2">Challenge 2: Riconoscimento Immagini</option>
+                            <option value="challenge3">Challenge 3: Generazione Testo</option>
+                        </select>
+
+                        <label for="challenge-pdf">Carica elaborato (solo PDF):</label>
+                        
+                        
+                        <div class="file-upload-wrapper" style="margin-top: 0.5rem;">
+                            <input type="file" id="challenge-pdf" name="challenge-pdf" accept="application/pdf" required 
+                                   style="width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1;">
+                        
+                            <span id="file-name-display" style="color: var(--color-text-primary); vertical-align: middle; margin-right: 1rem; font-style: italic; font-size: 0.9rem;"></span>
+                            
+                            <label for="challenge-pdf" class="cta-button-small" style="color: #FFFFFF; vertical-align: middle; cursor: pointer; flex-shrink: 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.3rem;">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                                </svg>
+                                Scegli file...
+                            </label>
+                        </div>
+                        <button type="submit" class="cta-button" style="color: #FFFFFF; margin-top: 1.5rem;">Carica Elaborato</button>
+                    </form>
+                </div>
+            </section>
+
         </div>
     </main>
 
@@ -121,7 +159,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // === 1. LOGICA ANIMAZIONI DI SCORRIMENTO (Standardizzata) ===
+            // === 1. LOGICA ANIMAZIONI DI SCORRIMENTO ===
             const sections = document.querySelectorAll('.fade-in-section');
             sections[0]?.classList.add('is-visible'); 
             const animatedChildrenInit = sections[0]?.querySelectorAll('.animate-on-visible');
@@ -146,7 +184,7 @@
                 } 
             });
 
-            // === 2. LOGICA BANDIERE NAZIONE (Già corretta) ===
+            // === 2. LOGICA BANDIERE NAZIONE ===
             const nationSelect = document.getElementById('team-nation');
             const flagDisplay = document.getElementById('nation-flag');
             const flagUrls = {
@@ -173,19 +211,38 @@
                     }
                 });
             }
+
+            // === 3. LOGICA INPUT FILE CUSTOM (Modificata) ===
+            const fileInput = document.getElementById('challenge-pdf');
+            const fileNameDisplay = document.getElementById('file-name-display'); // Lo span per il nome file
+
+            if (fileInput && fileNameDisplay) {
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files.length > 0) {
+                        // Aggiorna il testo nello span
+                        fileNameDisplay.textContent = this.files[0].name;
+                        fileNameDisplay.style.fontStyle = 'normal'; // Rimuove corsivo
+                    } else {
+                        fileNameDisplay.textContent = ''; // Svuota se deselezionato
+                        fileNameDisplay.style.fontStyle = 'italic'; 
+                    }
+                });
+            }
+
+            // === 4. LOGICA HAMBURGER MENU ===
             const hamburgerBtn = document.querySelector('.hamburger-menu');
             const navWrapper = document.querySelector('.nav-wrapper');
 
-        if (hamburgerBtn && navWrapper) {
-            hamburgerBtn.addEventListener('click', () => {
-                hamburgerBtn.classList.toggle('is-active');
-                navWrapper.classList.toggle('is-active');
-                
-                // Aggiorna aria-expanded per accessibilità
-                const isActive = hamburgerBtn.classList.contains('is-active');
-                hamburgerBtn.setAttribute('aria-expanded', isActive);
-            });
-        }
+            if (hamburgerBtn && navWrapper) {
+                hamburgerBtn.addEventListener('click', () => {
+                    hamburgerBtn.classList.toggle('is-active');
+                    navWrapper.classList.toggle('is-active');
+                    
+                    // Aggiorna aria-expanded per accessibilità
+                    const isActive = hamburgerBtn.classList.contains('is-active');
+                    hamburgerBtn.setAttribute('aria-expanded', isActive);
+                });
+            }
 
         });
     </script>
